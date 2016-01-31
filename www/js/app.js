@@ -3,20 +3,21 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'firebase'])
+angular.module('starter', ['ionic', 'firebase', 'ngCordova'])
 .factory('Items', ['$firebaseArray', function($firebaseArray) {
   var itemRef = new Firebase('https://shining-inferno-2964.firebaseio.com/items');
   return $firebaseArray(itemRef);
 }])
-.controller('listCtrl', function($scope, $ionicListDelegate, Items) {
+.controller('listCtrl', function($scope, $ionicListDelegate, $cordovaDialogs, Items) {
   $scope.items = Items;
   
   $scope.addItem = function() {
-    var name = prompt('What do you want to add to the list?');
-    if (name) {
-      $scope.items.$add({'name': name});
-//      $scope.items.push({'name': name});
-    }
+    $cordovaDialogs.prompt('What do you want to add to the list?', 'Task Tracker', ['Cancel', 'Add'], '')
+    .then(function(result) {
+      if (result.buttonIndex == 2) {
+        $scope.items.$add({name: result.input1});
+      }
+    });
   };
   
   $scope.completedTask = function(item) {
