@@ -30,8 +30,9 @@
       </ion-header-bar>
       <ion-content>
         <ion-list>
-            <ion-item ng-repeat="item in items">
+            <ion-item ng-repeat="item in items" ng-class="{completed:item.status == 'completed'}">
                 {{item.name}}
+                <ion-option-button class="button-energized" ng-click="completedTask(item)">X</ion-option-button>
             </ion-item>
         </ion-list>
       </ion-content>
